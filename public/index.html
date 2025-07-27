@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Meturferse, the Turf metaverse</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Open-source and community-driven utility for the original Turf plots at Meturferse.com" />
+  <meta name="keywords" content="NFT, blockchain, metaverse, land, turf, visualization" />
+  <meta name="theme-color" content="#3b82f6" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233b82f6'/%3E%3Ctext x='50' y='60' font-family='Arial' font-size='40' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
+  <!-- Mixpanel Analytics -->
+  <script type="text/javascript">
+    (function(c,a){if(!a.__SV){var b=window;try{var d,m,j,k=b.location,f=k.hash;d=function(a,b){return(m=a.match(RegExp(b+"=([^&]*)")))?m[1]:null};f&&d(f,"state")&&(j=JSON.parse(decodeURIComponent(d(f,"state"))),"mpeditor"===j.action&&(b.sessionStorage.setItem("_mpcehash",f),history.replaceState(j.desiredHash||"",c.title,k.pathname+k.search)))}catch(n){}var l,h;window.mixpanel=a;a._i=[];a.init=function(b,d,g){function c(b,i){var a=i.split(".");2==a.length&&(b=b[a[0]],i=a[1]);b[i]=function(){b.push([i].concat(Array.prototype.slice.call(arguments,0)))}}var e=a;"undefined"!==typeof g?e=a[g]=[]:g="mixpanel";e.people=e.people||[];e.toString=function(b){var a="mixpanel";"mixpanel"!==g&&(a+="."+g);b||(a+=" (stub)");return a};e.people.toString=function(){return e.toString(1)+".people (stub)"};l="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");for(h=0;h<l.length;h++)c(e,l[h]);var f="set set_once union unset remove delete".split(" ");e.get_group=function(){function a(c){b[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));e.push([d,call2])}}for(var b={},d=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<f.length;c++)a(f[c]);return b};a._i.push([b,d,g])};a.__SV=1.2;b=c.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===c.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";d=c.getElementsByTagName("script")[0];d.parentNode.insertBefore(b,d)}})(document,window.mixpanel||[]);
+  </script>
+  <script src="mixpanel.js" defer></script>
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+  <div id="header">
+    <div id="headerTop">
+      <a href="#" class="logo">
+        Meturferse
+        <span class="logo-tagline">the Turf metaverse</span>
+      </a>
+      <div class="desktop-controls">
+        <div class="header-section">
+          <button id="zoomOut" class="btn-icon" title="Zoom out">−</button>
+          <span id="zoomLv">100%</span>
+          <button id="zoomIn" class="btn-icon" title="Zoom in">+</button>
+        </div>
+        <button id="filterToggle" title="Toggle filters">Filters</button>
+        <label class="shade-toggle-wrapper">
+          <input type="checkbox" id="shadeToggle" disabled title="Show neighborhoods">
+          <span class="shade-toggle-label">Neighborhoods</span>
+        </label>
+        <div class="header-section">
+          <input id="walletInput" type="text" placeholder="0xAddress…">
+          <button id="walletBtn" class="btn-primary" title="Highlight holdings">Add Wallet</button>
+        </div>
+        <div class="theme-selector-wrapper">
+          <select id="themeSelector" title="Select theme">
+            <option value="light">🌞 Classic Light</option>
+            <option value="dark">🌙 Dark Mode</option>
+            <option value="pixel-forest">🌲 Pixel Forest</option>
+            <option value="cyberpunk">🌃 Cyberpunk</option>
+            <option value="ocean-depths">🌊 Ocean Depths</option>
+            <option value="desert-sunset">🏜️ Desert Sunset</option>
+            <option value="arctic-frost">❄️ Arctic Frost</option>
+            <option value="retro-terminal">💻 Retro Terminal</option>
+            <option value="royal-purple">👑 Royal Purple</option>
+            <option value="minimalist-mono">⚫ Minimalist</option>
+            <option value="pastel-dream">🌸 Pastel Dream</option>
+            <option value="industrial-steel">⚙️ Industrial Steel</option>
+            <option value="cosmic-space">🌌 Cosmic Space</option>
+          </select>
+        </div>
+      </div>
+      <button id="mobileMenuToggle" class="mobile-menu-toggle" title="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="active"></div>
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-section">
+        <label>Zoom Controls</label>
+        <div class="header-section">
+          <button id="zoomOutMobile" class="btn-icon" title="Zoom out">−</button>
+          <span id="zoomLvMobile">100%</span>
+          <button id="zoomInMobile" class="btn-icon" title="Zoom in">+</button>
+        </div>
+      </div>
+      <div class="mobile-menu-section">
+        <button id="filterToggleMobile" title="Toggle filters">Filters</button>
+      </div>
+      <div class="mobile-menu-section">
+        <label class="shade-toggle-wrapper">
+          <input type="checkbox" id="shadeToggleMobile" disabled title="Show neighborhoods">
+          <span class="shade-toggle-label">Neighborhoods</span>
+        </label>
+      </div>
+      <div class="mobile-menu-section">
+        <label>Wallet</label>
+        <div class="header-section">
+          <input id="walletInputMobile" type="text" placeholder="0xAddress…">
+          <button id="walletBtnMobile" class="btn-primary" title="Highlight holdings">Add Wallet</button>
+        </div>
+      </div>
+      <div class="mobile-menu-section">
+        <label>Theme</label>
+        <select id="themeSelectorMobile" title="Select theme">
+          <option value="light">🌞 Classic Light</option>
+          <option value="dark">🌙 Dark Mode</option>
+          <option value="pixel-forest">🌲 Pixel Forest</option>
+          <option value="cyberpunk">🌃 Cyberpunk</option>
+          <option value="ocean-depths">🌊 Ocean Depths</option>
+          <option value="desert-sunset">🏜️ Desert Sunset</option>
+          <option value="arctic-frost">❄️ Arctic Frost</option>
+          <option value="retro-terminal">💻 Retro Terminal</option>
+          <option value="royal-purple">👑 Royal Purple</option>
+          <option value="minimalist-mono">⚫ Minimalist</option>
+          <option value="pastel-dream">🌸 Pastel Dream</option>
+          <option value="industrial-steel">⚙️ Industrial Steel</option>
+          <option value="cosmic-space">🌌 Cosmic Space</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="panel"></div>
+  <canvas id="canvas"></canvas>
+
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading Turf map...</div>
+  </div>
+
+  <div id="overlay" style="display: none;">
+    <div id="popup">
+      <button id="backBtn">✕</button>
+      <img id="overlayImg" alt="Plot 256px" />
+      <div id="popupMeta"></div>
+    </div>
+  </div>
+
+  <div id="fullscreenOverlay">
+    <img id="fullscreenImage" alt="Full-screen plot" />
+  </div>
+
+  <footer id="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <p>Fund this project. Help revive Turf.
+          <a href="https://etherscan.io/address/meturferse.eth" target="_blank" rel="noopener" class="footer-donate">
+            Donate → <strong>meturferse.eth</strong>
+          </a>
+        </p>
+      </div>
+      <div class="footer-section footer-message">
+        <p>Meturferse is a community revival of the original <strong>Turf</strong> plots NFT project.</p>
+        <p>I love Turf. You love Turf. We all love Turf.</p>
+      </div>
+      <div class="footer-section">
+        <a href="https://github.com/kristiandroste/meturferse" target="_blank" rel="noopener" class="footer-link">
+          Connect or Contribute on GitHub
+        </a>
+      </div>
+      <div class="footer-section">
+        <a href="#" id="faqLink" class="footer-link">FAQ</a>
+      </div>
+      <div class="footer-section">
+        <a href="https://discord.gg/jcjTjzDFJj" target="_blank" rel="noopener" class="footer-link" style="font-size: 0.5em; opacity: 0.5;">
+          Original Turf Discord
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FAQ Modal -->
+  <div id="faqOverlay" class="overlay" style="display: none;">
+    <div id="faqModal" class="modal">
+      <button id="faqCloseBtn" class="modal-close" title="Close FAQ">×</button>
+      <h2>Neighborhoods</h2>
+
+      <div class="faq-section">
+        <h3>Mathematical Definition</h3>
+        <p>Neighborhoods are calculated using a <strong>Manhattan distance-based Voronoi diagram</strong>. Each filtered
+          plot creates an "influence zone" that extends outward until it meets another plot's influence, using
+          city-block distance (horizontal + vertical steps) rather than straight-line distance.</p>
+      </div>
+
+      <div class="faq-section">
+        <h3>How It's Calculated</h3>
+        <p><strong>Step 1:</strong> For every empty plot on the grid, calculate Manhattan distance to all filtered
+          plots.</p>
+        <p><strong>Step 2:</strong> Assign each plot to its closest neighbor(s). Plots controlled by single owners get
+          unique colors.</p>
+        <p><strong>Step 3:</strong> "Contested" or "shared" territory (equidistant from multiple plots) gets gray
+          shading with numbers showing how many plots compete for that space.</p>
+      </div>
+
+      <div class="faq-section">
+        <h3>Visual Legend</h3>
+        <p><strong>Colored regions:</strong> Territory controlled by a single filtered plot.</p>
+        <p><strong>Gray regions with numbers:</strong> Shared territory, the superimposed number showing how many
+          filtered plots are equidistant (i.e. have equal claim).</p>
+      </div>
+
+      <h2>Future Vision (not a hard roadmap)</h2>
+
+      <div class="faq-section">
+        <h3>Community-Driven Metaverse Architecture</h3>
+        <p>The neighborhood system forms the foundation for a <strong>community-driven metaverse</strong> where Turf
+          becomes a template for distributed virtual worlds. Like the internet itself, the Meturferse operates on
+          distributed principles. When users hold real stakes through plot ownership, in-game wealth generation directly
+          translates to real-world earnings in ETH and other virtual assets.</p>
+      </div>
+
+      <div class="faq-section">
+        <h3>Player Avatar & Economy System</h3>
+        <p><strong>ERC721 Sprites:</strong> Players mint customizable avatar sprites (~$5) with unlimited ownership for
+          multi-business operations. Clothing, hairstyles, accessories, and pets are separate ERC721 tokens purchased
+          from specialized plot types.</p>
+        <p><strong>Dress Codes & Plot Control:</strong> Plot owners can enforce specific attire requirements (e.g., "No
+          shirt, no shoes, no plot entry" or costume-specific rules like "Soba Fett costume only") and charge fees for
+          violations, creating revenue streams.</p>
+      </div>
+
+      <div class="faq-section">
+        <h3>Plot-Based Economic Networks</h3>
+        <p><strong>Specialized Functions:</strong> Each plot type serves specific economic purposes. Farms supply
+          restaurants, restaurants pay utilities to fire/police stations, players pay rent and utilities for residences.
+          This creates an interconnected web where neighborhoods enable <strong>economies of scale</strong> through
+          proximity and specialization.</p>
+        <p><strong>Real ETH Circulation:</strong> All transactions flow in ETH. Plot ownership creates controllable cash
+          flows. The more you own and optimize within a neighborhood, the more real-world wealth you generate through
+          strategic economic positioning.</p>
+      </div>
+
+      <div class="faq-section">
+        <h3>Distributed Creator Economy & Protocol</h3>
+        <p><strong>Standardized Development Framework:</strong> The Meturferse operates as a metadata protocol with
+          standardized sprite sheet dimensions and token specifications. For example, clothing creators must follow
+          format requirements and sell through appropriate plot types (clothing stores, boutiques, etc.).</p>
+        <p><strong>Flexible Creator Distribution:</strong> Creators without plot ownership can lease storefronts from
+          landlords or establish smart contract profit-sharing agreements for distribution partnerships. This enables
+          anyone to participate in the economy regardless of initial capital.</p>
+        <p><strong>Cross-Platform Interoperability:</strong> With standardized protocols, creators can deploy utilities
+          across multiple platforms (e.g. their own websites, centralized Meturferse instances, other Turf-derivative
+          platforms, or established Web3 service providers). Human creativity drives the ecosystem, while the protocol
+          ensures seamless integration between real-world and virtual economies.</p>
+      </div>
+
+      <div class="faq-section">
+        <h3>Original Assets Locked Down</h3>
+        <p><strong>Immutability & Stewardship:</strong> Ensuring that Turf is as permanent as the blockchain 
+          is an important step in maximizing the value, longevity, and utility that original Turf plots, 
+          Founder's Passes, and Meturferse-related assets hold. The Meturferse developer is committed to 
+          building for the benefit of all who love Turf. Whether through a community-driven effort, a 
+          Meturferse-led acquisition (if Meturferse happens to become financially successful), or by some 
+          other means, it may become feasible at some point in the future to secure the orginal smart contracts, 
+          wallets, codebase, and/or other assets created by the original Turf team and make them immutable for all eternity.
+          This would be the Turf equivalent of Satoshi's lost bitcoin wallets that sit, locked, accumulating and securing 
+          value for the sole benefit of the asset class in question.</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
