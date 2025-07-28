@@ -93,6 +93,7 @@ We welcome contributions from the community! Whether you're a developer, designe
 
 ### Image Rights
 All plot images are copyright of the original Turf NFT project and/or the respective NFT holders. Meturferse displays these images under fair use for the purpose of providing utility to the Turf community.
+The Soba Fett helmet logo and Turf avatar are copyright of Kristian Droste.
 
 ### Original Assets Protection
 Meturferse is for the benefit of all who love Turf. Efforts may be made to secure the original smart contracts, wallets, codebase, and other assets created by the original Turf team to make them immutable for all eternity.
@@ -101,6 +102,7 @@ Meturferse is for the benefit of all who love Turf. Efforts may be made to secur
 ## Related Links
 
 - **Original Turf Contract**: [0x55d89273143DE3dE00822c9271DbCBD9B44B44C6](https://etherscan.io/address/0x55d89273143DE3dE00822c9271DbCBD9B44B44C6)
+- Credit for the original Turf artwork is due [M.T.](https://tseng.co)
 
 ---
 
