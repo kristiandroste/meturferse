@@ -385,8 +385,26 @@ html {
   color: var(--accent);
   text-decoration: none;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  gap: 12px;
+}
+
+.logo-image {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .logo-tagline {
@@ -1366,6 +1384,16 @@ button:active {
 
   .logo {
     font-size: 1.2rem !important;
+    gap: 8px;
+  }
+
+  .logo-image {
+    width: 36px;
+    height: 36px;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
   }
 
   .logo-tagline {
