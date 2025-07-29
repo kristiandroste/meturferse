@@ -1228,6 +1228,30 @@
     let isSelecting = false; // Prevent rapid multi-selection
     let mouseDragStart = null; // For mouse drag navigation
     
+    // Multi-touch state for pinch-to-zoom
+    let lastTouchDistance = null;
+    let lastTouchCenter = null;
+    let isPinching = false;
+    
+    // Helper function to calculate distance between two touch points
+    function getTouchDistance(touches) {
+      const touch1 = touches[0];
+      const touch2 = touches[1];
+      const dx = touch1.clientX - touch2.clientX;
+      const dy = touch1.clientY - touch2.clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    // Helper function to get center point between two touches
+    function getTouchCenter(touches) {
+      const touch1 = touches[0];
+      const touch2 = touches[1];
+      return {
+        x: (touch1.clientX + touch2.clientX) / 2,
+        y: (touch1.clientY + touch2.clientY) / 2
+      };
+    }
+    
     canvas.addEventListener('click', e => {
       if (isDragging || isSelecting) return; // Don't select if we were dragging or already selecting
       
@@ -1266,16 +1290,26 @@
       draw();
     });
     
-    // Add touch pan support
+    // Add touch pan and pinch-zoom support
     canvas.addEventListener('touchstart', e => {
       if (e.touches.length === 1) {
+        // Single touch - initialize pan
         lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         isDragging = false;
+        isPinching = false;
+      } else if (e.touches.length === 2) {
+        // Two touches - initialize pinch-to-zoom
+        lastTouchDistance = getTouchDistance(e.touches);
+        lastTouchCenter = getTouchCenter(e.touches);
+        isPinching = true;
+        isDragging = false;
+        lastTouch = null; // Clear single touch state
       }
     }, { passive: true });
     
     canvas.addEventListener('touchmove', e => {
-      if (e.touches.length === 1 && lastTouch) {
+      if (e.touches.length === 1 && lastTouch && !isPinching) {
+        // Single touch pan
         e.preventDefault();
         const touch = e.touches[0];
         const deltaX = touch.clientX - lastTouch.x;
@@ -1292,13 +1326,65 @@
         offX = targetOffX;
         offY = targetOffY;
         draw();
+      } else if (e.touches.length === 2 && isPinching && lastTouchDistance && lastTouchCenter) {
+        // Two touch pinch-to-zoom
+        e.preventDefault();
+        
+        const currentDistance = getTouchDistance(e.touches);
+        const currentCenter = getTouchCenter(e.touches);
+        
+        // Calculate zoom factor based on distance change
+        const zoomFactor = currentDistance / lastTouchDistance;
+        const newScale = Math.min(Math.max(targetScale * zoomFactor, 0.1), 10);
+        
+        // Calculate world coordinates of the pinch center
+        const r = canvas.getBoundingClientRect();
+        const centerX = currentCenter.x - r.left;
+        const centerY = currentCenter.y - r.top;
+        const worldX = (centerX - offX) / scale;
+        const worldY = (centerY - offY) / scale;
+        
+        // Update scale and adjust offset to zoom around the pinch center
+        targetScale = newScale;
+        targetOffX = centerX - worldX * targetScale;
+        targetOffY = centerY - worldY * targetScale;
+        
+        // Update zoom level display
+        zoomLv.textContent = `${Math.round(targetScale * 100)}%`;
+        const zoomLvMobile = document.getElementById('zoomLvMobile');
+        if (zoomLvMobile) {
+          zoomLvMobile.textContent = `${Math.round(targetScale * 100)}%`;
+        }
+        
+        // Update state for next move event
+        lastTouchDistance = currentDistance;
+        lastTouchCenter = currentCenter;
+        
+        // Apply changes immediately for smooth pinch feedback
+        scale = targetScale;
+        offX = targetOffX;
+        offY = targetOffY;
+        draw();
       }
     }, { passive: false });
     
-    canvas.addEventListener('touchend', () => {
-      lastTouch = null;
-      setTimeout(() => { isDragging = false; }, 100);
-      updateURL();
+    canvas.addEventListener('touchend', (e) => {
+      if (e.touches.length === 0) {
+        // All touches ended - clean up all state
+        lastTouch = null;
+        lastTouchDistance = null;
+        lastTouchCenter = null;
+        isPinching = false;
+        setTimeout(() => { isDragging = false; }, 100);
+        updateURL();
+      } else if (e.touches.length === 1 && isPinching) {
+        // Went from two touches to one - switch back to pan mode
+        isPinching = false;
+        lastTouchDistance = null;
+        lastTouchCenter = null;
+        lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        isDragging = false;
+      }
     }, { passive: true });
 
     // Mouse drag navigation
