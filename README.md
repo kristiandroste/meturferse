@@ -13,11 +13,12 @@ Meturferse revives the original Turf NFT collection into an interactive 2D metav
 
 ## How to Use
 
-1. **Browse the Map**: Use mouse/touch to pan and zoom around Turf City
-2. **Query Wallets**: Enter an Ethereum address to highlight plots owned
-3. **Apply Filters**: Use the filter panel to find plots by specific attributes
-4. **Explore Plots**: Click any plot to view detailed information and high-resolution imagery
-5. **Switch Themes**: Choose from 13 visual themes to customize your experience
+1. **Switch Themes**: Choose from 13 visual themes to customize your experience
+2. **Browse the Map**: Use mouse/touch to pan and zoom around Turf City
+3. **Explore Plots**: Click any plot to view detailed information and high-resolution imagery
+4. **Query Wallets**: Enter an Ethereum address to highlight plots owned
+5. **Apply Filters**: Use the filter panel to find plots by specific attributes
+6. **View Neighborhoods**: With filters selected, click the Neighborhoods button to view each filtered plot's zone of influence
 
 
 ## Understanding Neighborhoods
@@ -35,24 +36,16 @@ Neighborhoods are calculated using a **Manhattan distance-based Voronoi diagram*
 - **Gray regions with numbers**: Shared territory, with numbers showing how many filtered plots have equal claim
 
 
-## Future Vision
-
-*Note: This represents a community vision, not a hard roadmap*
+## Meturferse is a simple vision of distributed utilities built on top of Turf plots.
 
 ### Community-Driven Metaverse Architecture
 The neighborhood system forms the foundation for a **community-driven metaverse** where Turf becomes a template for distributed virtual worlds. When players hold real stakes through owning tokens and associated infrastructure, and each action relies on a stack of interconnected assets and third-player actions, wealth generation within an in-game economy denominated in ETH directly translates to real-world earnings and appreciation.
 
-**Meturferse** will become a world operating on three core notions:
+**Meturferse** was founded and operates on three core notions, which comprise its vision for the future development:
 
 - **Neighborhoods** delimit economies of scale and provide a mechanism for natural growth of player populations and derivative utilities
 - **Plot types** each have a specific purpose and/or set of potential (and potentially open-ended) capabilities, so each plot plays a real part in a diversified in-game economy
 - **Wealth generation** in the Meturferse ≈ wealth generation in real life
-
-#### Notes on Hypothetical Tokenomic Mechanisms
-- **Sprites & Wearables**: Players start with a standard sprite (ERC721, ~$5) they can customize with clothing, hairstyles, accessories, and pets, each a separate ERC721 purchased from in-game purveyors. Plot owners can set dress codes and charge fees for violations.
-- **Interconnected Economy**: Players have basic needs, such as residence and food, that they must acquire through gameplay. A tightly interwoven economy allows for a chain of value creation based on normal gameplay. For example, farms supply restaurants with ingredients, restaurants supply players' sprites with food and also pay fees to power plants, taxes to government buildings, and wages to workers (e.g. numerous sprites owned by the same player who is the landlord of the restaurant), who then must pay fees to a bank for wiring their rent payments to the landlord of a snooty brownstone, who pays development fees to the Meturferse protocol for operating a weekly 1-ETH buy-in poker game on their own website that is linked to their brownstone plot. In this way, and in other creative and near-infinitely many way, the Meturferse fosters constant ETH exchange through a symbiosis of centralized gameplay and distributed utility. The more a player owns, the more they control, the more they can build and optimize to generate demand, the more cashflow they earn as real-world virtual assets (ETH).
-- **Entry & Growth**: New players can enter with a single token, a sprite or a Turf plot. While there is no clear delineation between the two types of players, sprite players generate wealth through active gameplay mechanisms while plot players (i.e. landlords) accumulate through more passive means through gameplay and/or by building custom utilities (e.g. minigames, streams, chatrooms, alpha clubs, dApps, financial services, game asset creation, etc.).
-- **Plot Integration**: Plot owners can build functionality via their own websites, businesses, smart contracts, and other software. APIs/hooks will allow distributed expansion by letting creators, developers, and businesses integrate their derivative assets and services through Turf plots that they own or lease.
 
 
 ## Funding & Support
