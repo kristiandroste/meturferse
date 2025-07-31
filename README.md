@@ -114,4 +114,4 @@ Meturferse is for the benefit of all who love Turf. Efforts may be made to secur
 Meturferse is a community revival of the original **Turf** plots NFT project, created to preserve, celebrate, and extend the utility of these beloved digital land assets.
 
 ---
-### ☕ Buy me a coffee please → meturferse.eth
+### ☕ Buy me a coffee → meturferse.eth
