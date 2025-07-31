@@ -284,6 +284,7 @@
     buildFilters();
     initZoomPan();
     initMobileMenu();
+    initNeighborhoodsTooltip();
     loadStateFromURL();
     window.addEventListener('resize', () => {
       draw();
@@ -1137,6 +1138,86 @@
         adjustPanelPosition();
       }
     }, true); // Use capture phase for better event handling
+  }
+
+  // ─── NEIGHBORHOODS TOOLTIP FUNCTIONALITY ─────────────────────────────────
+  function initNeighborhoodsTooltip() {
+    const shadeToggleDesktop = document.getElementById('shadeToggle');
+    const shadeToggleMobileEl = document.getElementById('shadeToggleMobile');
+    const shadeToggleLabel = document.querySelector('#shadeToggle + .shade-toggle-label');
+    const shadeToggleLabelMobile = document.querySelector('#shadeToggleMobile + .shade-toggle-label');
+    const tooltip = document.getElementById('neighborhoodsTooltip');
+    const tooltipMobile = document.getElementById('neighborhoodsTooltipMobile');
+
+    console.log('Initializing neighborhoods tooltip...', {
+      shadeToggleDesktop: !!shadeToggleDesktop,
+      shadeToggleLabel: !!shadeToggleLabel,
+      tooltip: !!tooltip,
+      shadeToggleMobileEl: !!shadeToggleMobileEl,
+      shadeToggleLabelMobile: !!shadeToggleLabelMobile,
+      tooltipMobile: !!tooltipMobile
+    });
+
+    // Desktop tooltip functionality
+    if (shadeToggleDesktop && shadeToggleLabel && tooltip) {
+      let hoverTimeout;
+      
+      shadeToggleLabel.addEventListener('mouseenter', () => {
+        console.log('Desktop mouseenter - disabled:', shadeToggleDesktop.disabled);
+        if (shadeToggleDesktop.disabled) {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = setTimeout(() => {
+            console.log('Showing desktop tooltip');
+            tooltip.classList.add('show');
+          }, 200); // Small delay to prevent flashing
+        }
+      });
+
+      shadeToggleLabel.addEventListener('mouseleave', () => {
+        console.log('Desktop mouseleave');
+        clearTimeout(hoverTimeout);
+        tooltip.classList.remove('show');
+      });
+    }
+
+    // Mobile tooltip functionality (touch-based)
+    if (shadeToggleMobileEl && shadeToggleLabelMobile && tooltipMobile) {
+      let touchTimeout;
+      
+      shadeToggleLabelMobile.addEventListener('touchstart', (e) => {
+        console.log('Mobile touchstart - disabled:', shadeToggleMobileEl.disabled);
+        if (shadeToggleMobileEl.disabled) {
+          e.preventDefault(); // Prevent default touch behavior
+          clearTimeout(touchTimeout);
+          console.log('Showing mobile tooltip');
+          tooltipMobile.classList.add('show');
+          
+          // Auto-hide after 2 seconds on mobile
+          touchTimeout = setTimeout(() => {
+            tooltipMobile.classList.remove('show');
+          }, 2000);
+        }
+      });
+
+      // Hide tooltip when touching elsewhere
+      document.addEventListener('touchstart', (e) => {
+        if (!shadeToggleLabelMobile.contains(e.target)) {
+          tooltipMobile.classList.remove('show');
+          clearTimeout(touchTimeout);
+        }
+      });
+    }
+
+    // Hide tooltips when buttons become enabled (filters are applied)
+    const originalApplyFilters = applyFilters;
+    window.applyFilters = function() {
+      originalApplyFilters.call(this);
+      // Hide tooltips when shade toggle becomes enabled
+      if (shadeToggleDesktop && !shadeToggleDesktop.disabled) {
+        tooltip?.classList.remove('show');
+        tooltipMobile?.classList.remove('show');
+      }
+    };
   }
 
   // ─── ZOOM, PAN, CLICK & DOUBLE-CLICK ────────────────────────────────────
