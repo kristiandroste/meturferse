@@ -41,11 +41,11 @@ Neighborhoods are calculated using a **Manhattan distance-based Voronoi diagram*
 ### Community-Driven Metaverse Architecture
 The neighborhood system forms the foundation for a **community-driven metaverse** where Turf becomes a template for distributed virtual worlds. When players hold real stakes through owning tokens and associated infrastructure, and each action relies on a stack of interconnected assets and third-player actions, wealth generation within an in-game economy denominated in ETH directly translates to real-world earnings and appreciation.
 
-**Meturferse** was founded and operates on three core notions, which comprise its vision for the future development:
+**Meturferse** was founded and operates on three core notions, which comprise its vision for future development:
 
 - **Neighborhoods** delimit economies of scale and provide a mechanism for natural growth of player populations and derivative utilities
-- **Plot types** each have a specific purpose and/or set of potential (and potentially open-ended) capabilities, so each plot plays a real part in a diversified in-game economy
-- **Wealth generation** in the Meturferse ≈ wealth generation in real life
+- **Plot types** can have specific purposes and/or sets of potential (and potentially open-ended) capabilities, so each plot plays a real part in a diversified and distributed ecosystem
+- **Wealth generation** in the Meturferse can and should ≈ wealth generation in real life
 
 
 ## Funding & Support
