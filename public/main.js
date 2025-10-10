@@ -1781,4 +1781,178 @@
     }
   };
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FEEDBACK MODAL MANAGEMENT
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Google Sheets Web App URL
+  const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz6sf7kDkyFCeYTuo1gYcz0zD8Ndu2QG7Zj-xTfE3bEDKCDSm5GYc7fUDmAT6YtQEy_/exec';
+
+  const feedbackLink = document.getElementById('feedbackLink'),
+        feedbackOverlay = document.getElementById('feedbackOverlay'),
+        feedbackCloseBtn = document.getElementById('feedbackCloseBtn'),
+        feedbackForm = document.getElementById('feedbackForm'),
+        feedbackEmail = document.getElementById('feedbackEmail'),
+        feedbackText = document.getElementById('feedbackText'),
+        charCount = document.getElementById('charCount'),
+        feedbackSubmitBtn = document.getElementById('feedbackSubmitBtn'),
+        dontShowAgain = document.getElementById('dontShowAgain'),
+        feedbackMessage = document.getElementById('feedbackMessage');
+
+  // Check if popup should be shown on load
+  function checkFeedbackPopupOnLoad() {
+    const dismissed = localStorage.getItem('feedbackPopupDismissed');
+    if (!dismissed) {
+      setTimeout(() => {
+        showFeedbackPopup();
+      }, 1000); // Show after 1 second
+    }
+  }
+
+  // Show feedback popup
+  function showFeedbackPopup() {
+    feedbackOverlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    feedbackEmail.focus();
+  }
+
+  // Close feedback popup
+  function closeFeedbackPopup() {
+    feedbackOverlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    // Reset form
+    feedbackForm.reset();
+    charCount.textContent = '0';
+    feedbackMessage.style.display = 'none';
+    updateSubmitButton();
+  }
+
+  // Update character counter
+  feedbackText?.addEventListener('input', () => {
+    const length = feedbackText.value.length;
+    charCount.textContent = length;
+    updateSubmitButton();
+  });
+
+  // Update email field validation
+  feedbackEmail?.addEventListener('input', updateSubmitButton);
+
+  // Update submit button state
+  function updateSubmitButton() {
+    const emailValue = feedbackEmail.value.trim();
+    const feedbackValue = feedbackText.value.trim();
+    const hasEmail = emailValue.length > 0;
+    const hasFeedback = feedbackValue.length > 0;
+    const isEmailValid = !hasEmail || isValidEmail(emailValue);
+
+    // Enable button if at least one field is filled and email is valid (if provided)
+    feedbackSubmitBtn.disabled = !(hasEmail || hasFeedback) || !isEmailValid;
+  }
+
+  // Email validation
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Show feedback message
+  function showFeedbackMessage(type, message) {
+    feedbackMessage.textContent = message;
+    feedbackMessage.className = `feedback-message ${type}`;
+    feedbackMessage.style.display = 'block';
+  }
+
+  // Handle form submission
+  feedbackForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const emailValue = feedbackEmail.value.trim();
+    const feedbackValue = feedbackText.value.trim();
+
+    // Validate at least one field is filled
+    if (!emailValue && !feedbackValue) {
+      showFeedbackMessage('error', 'Please fill in at least one field');
+      return;
+    }
+
+    // Validate email format if provided
+    if (emailValue && !isValidEmail(emailValue)) {
+      showFeedbackMessage('error', 'Please enter a valid email address');
+      return;
+    }
+
+    // Disable submit button during submission
+    feedbackSubmitBtn.disabled = true;
+    feedbackSubmitBtn.textContent = 'Submitting...';
+
+    try {
+      // Prepare data for Google Sheets
+      const data = {
+        email: emailValue,
+        feedback: feedbackValue
+      };
+
+      // Submit to Google Sheets
+      const response = await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Google Apps Script requires no-cors
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+
+      // Note: With no-cors mode, we can't read the response
+      // So we assume success if no error was thrown
+      console.log('Feedback submitted:', data);
+
+      // Show success message
+      showFeedbackMessage('success', 'Thank you for your feedback!');
+
+      // Check if "Don't show again" is checked
+      if (dontShowAgain.checked) {
+        localStorage.setItem('feedbackPopupDismissed', 'true');
+      }
+
+      // Close popup after 2 seconds
+      setTimeout(() => {
+        closeFeedbackPopup();
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      showFeedbackMessage('error', 'Failed to submit. Please try again.');
+      feedbackSubmitBtn.disabled = false;
+      feedbackSubmitBtn.textContent = 'Submit';
+    }
+  });
+
+  // Show feedback popup when link is clicked
+  feedbackLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    showFeedbackPopup();
+  });
+
+  // Close feedback popup
+  feedbackCloseBtn?.addEventListener('click', closeFeedbackPopup);
+
+  // Close feedback on overlay click
+  feedbackOverlay?.addEventListener('click', (e) => {
+    if (e.target === feedbackOverlay) {
+      closeFeedbackPopup();
+    }
+  });
+
+  // Close feedback on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && feedbackOverlay.style.display === 'flex') {
+      closeFeedbackPopup();
+    }
+  });
+
+  // Initialize feedback popup on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    checkFeedbackPopupOnLoad();
+  });
+
 })();
