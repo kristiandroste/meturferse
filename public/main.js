@@ -1785,8 +1785,8 @@
   // FEEDBACK MODAL MANAGEMENT
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // Google Sheets Web App URL
-  const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz6sf7kDkyFCeYTuo1gYcz0zD8Ndu2QG7Zj-xTfE3bEDKCDSm5GYc7fUDmAT6YtQEy_/exec';
+  // Feedback endpoint (proxied by the server to avoid CORS)
+  const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwUK6v5UKmNmEFLomtk8DWZqFrX8kNHYIEt_k7cPzFKJKpKD6ho-UWSr13Zp5q2NoUl/exec';
 
   const feedbackLink = document.getElementById('feedbackLink'),
         feedbackOverlay = document.getElementById('feedbackOverlay'),
@@ -1886,25 +1886,16 @@
     feedbackSubmitBtn.textContent = 'Submitting...';
 
     try {
-      // Prepare data for Google Sheets
-      const data = {
-        email: emailValue,
-        feedback: feedbackValue
-      };
+      // Submit using FormData (no custom headers; avoids preflight)
+      const formData = new FormData(feedbackForm);
+      const response = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: formData });
 
-      // Submit to Google Sheets
-      const response = await fetch(GOOGLE_SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Google Apps Script requires no-cors
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-
-      // Note: With no-cors mode, we can't read the response
-      // So we assume success if no error was thrown
-      console.log('Feedback submitted:', data);
+      // Try to parse JSON response (Apps Script returns JSON text)
+      let json = null;
+      try { json = await response.json(); } catch (_) { /* ignore parse errors */ }
+      if (json && json.result !== 'success') {
+        throw new Error(json.message || 'Submission failed');
+      }
 
       // Show success message
       showFeedbackMessage('success', 'Thank you for your feedback!');
